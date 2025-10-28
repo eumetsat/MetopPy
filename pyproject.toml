@@ -1,0 +1,54 @@
+[project]
+name = "metoppy"
+version = "0.1.0"
+description = "Python package wrapper of MetopDatasets.jl Julia package for reading products from the METOP satellites."
+authors = [
+    { name = "Simon Kok Lupemba", email = "simon.koklupemba@eumetsat.int" },
+    { name = "Francesco Murdaca", email = "francesco.murdaca@eumetsat.int" }
+]
+maintainers = [
+  { name = "Simon Kok Lupemba", email = "simon.koklupemba@eumetsat.int" }
+]
+dependencies = [
+    "juliacall>=0.9.14",
+    "juliapkg>=0.1.22",
+]
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering"
+]
+
+[project.urls]
+Homepage = "https://github.com/eumetsat/MetopDatasets.jl"
+"Bug Tracker" = "https://github.com/eumetsat/MetopDatasets.jl/issues"
+Documentation = "https://github.com/eumetsat/MetopDatasets.jl/blob/main/README.md"
+"Source Code" = "https://github.com/eumetsat/MetopDatasets.jl"
+Organization = "https://github.com/eumetsat"
+"Release Notes" = "https://github.com/eumetsat/MetopDatasets.jl/blob/main/CHANGELOG.md"
+
+
+[project.optional-dependencies]
+test = [
+    "pytest==8.4.1",
+    "pytest-html==4.1.1",
+    "pytest-mock==3.14.1",
+    "coverage==7.10.5",
+    "pre-commit==4.3.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.sdist]
+include = ["metoppy", "README.md", "LICENSE"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["metoppy"]
