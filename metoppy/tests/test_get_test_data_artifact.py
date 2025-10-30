@@ -12,7 +12,6 @@
 
 # TODO: Convert to pytest
 from pathlib import Path
-from juliacall import Main
 from metoppy.metopreader import MetopReader
 
 metop_reader = MetopReader()
@@ -23,7 +22,7 @@ reduced_data_files = [f for f in reduced_data_folder.iterdir() if f.is_file()]
 
 test_file_name = next((s for s in reduced_data_files if s.name.startswith("ASCA_SZO")))
 test_file_path = reduced_data_folder / test_file_name
-ds = metop_reader.load_dataset(file_path=str(test_file_path))
+ds = metop_reader.open_dataset(file_path=str(test_file_path), maskingvalue = float("nan"))
 
 keys = metop_reader.get_keys(ds)
 print(list(keys))
@@ -31,12 +30,13 @@ print(list(keys))
 print(ds["latitude"])
 
 # Convert CFVariable to a full Julia Array
-latitude_julia = Main.Array(ds["latitude"])  # preserves the 2D shape
+latitude_julia = metop_reader.as_array(ds['latitude'])  # preserves the 2D shape
+latitude_shape = metop_reader.shape(latitude_julia)
 
 # Convert to nested Python list
 latitude_list = [
-    [latitude_julia[i, j] for j in range(latitude_julia.size[1])]
-    for i in range(latitude_julia.size[0])
+    [latitude_julia[i, j] for j in range(latitude_shape[1])]
+    for i in range(latitude_shape[0])
 ]
 
 # Print first 5x5 elements

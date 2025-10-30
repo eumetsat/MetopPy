@@ -5,7 +5,7 @@ It's a Python wrapper around [MetopDatasets.jl](https://github.com/eumetsat/Meto
 [MetopDatasets.jl](https://github.com/eumetsat/MetopDatasets.jl) is a package for reading products from the [METOP satellites](https://www.eumetsat.int/our-satellites/metop-series) using the native binary format specified for each product. The METOP satellites are part of the EUMETSAT-POLAR-SYSTEM (EPS) and have produced near real-time, global weather and climate observation since 2007. Learn more METOP and the data access on [EUMETSATs user-portal](https://user.eumetsat.int/dashboard).
 
 ## Status
-Metopdatasetpy is under development and is not ready for use yet.
+MetopPy is under development and is not ready for use yet.
 
 ## Copyright and License
 This code is licensed under MIT license. See file LICENSE for details on the usage and distribution terms.
@@ -56,7 +56,7 @@ reduced_data_files = [f for f in reduced_data_folder.iterdir() if f.is_file()]
 
 test_file_name = next((s for s in reduced_data_files if s.name.startswith("ASCA_SZO")))
 test_file_path = reduced_data_folder / test_file_name
-ds = metop_reader.load_dataset(file_path=str(test_file_path))
+ds = metop_reader.open_dataset(file_path=str(test_file_path), maskingvalue = float("nan"))
 ```
 
 2. Check keys
@@ -86,7 +86,7 @@ print(ds['latitude'])
 
 ```
 latitude (42 × 10)
-  Datatype:    Union{Missing, Float64} (Int32)
+  Datatype:    Float64 (Int32)
   Dimensions:  xtrack × atrack
   Attributes:
    description          = Latitude (-90 to 90 deg)
@@ -96,18 +96,18 @@ latitude (42 × 10)
 
 </details>
 
-4. Read variable
+4. Read variable as neasted Python list
 
 ```python
-from juliacall import Main
 
-# Convert CFVariable to a full Julia Array
-latitude_julia = Main.Array(ds['latitude'])  # preserves the 2D shape
+# Load CFVariable as a full Julia Array
+latitude_julia = metop_reader.as_array(ds['latitude']) # preserves the 2D shape
+latitude_shape = metop_reader.shape(latitude_julia)
 
 # Convert to nested Python list
 latitude_list = [
-  [latitude_julia[i, j] for j in range(latitude_julia.size[1])]
-  for i in range(latitude_julia.size[0])
+  [latitude_julia[i, j] for j in range(latitude_shape[1])]
+  for i in range(latitude_shape[0])
 ]
 
 # Print first 5x5 elements
@@ -128,7 +128,48 @@ for row in latitude_list[:5]:
 
 </details>
 
+5. Read a slice of the variable (This is a good way to limit memory use for large variables)
 
+```python
+longitude_slice = metop_reader.as_array(ds['longitude'][10:14,0:2])
+print(metop_reader.shape(longitude_slice))
+```
+<details>
+
+<summary>Output of the print </summary>
+
+```
+(4, 2)
+```
+
+</details>
+
+6. Covert julia array to numpy (requires that numpy is also installed)
+
+```python
+import numpy as np
+# Covert the julia array as numpy
+longitude_slice_np = np.array(longitude_slice) # "copy = None" can be used to reduce memory
+print(longitude_slice_np)
+```
+<details>
+
+<summary>Output of the print </summary>
+
+```
+[[233.685948 233.033544]
+ [233.276564 232.620004]
+ [232.858097 232.197423]
+ [232.430274 231.765534]]
+```
+
+</details>
+
+7. Close dataset and free file lock
+
+```python
+metop_reader.close_dataset(ds)
+```
 
 ## Development
 
