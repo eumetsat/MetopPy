@@ -35,10 +35,11 @@ The following dependencies are only required for building/editing/testing the so
 | Dependency | Version | License | Home URL |
 |------|---------|---------|--------------|
 | pytest | 8.4.1  | MIT License (MIT) | https://docs.pytest.org/en/latest |
+| pytest-cov | 7.0 | MIT License (MIT) | https://pytest-cov.readthedocs.io/en/latest |
 | pytest-html | 4.1.1 | MIT License (MIT)   | https://github.com/pytest-dev/pytest-html  |
 | pytest-mock | 3.14.1  | MIT License (MIT) | https://github.com/pytest-dev/pytest-mock |
-| coverage | 7.10.5  | Apache Software License (Apache License Version 2.0) | https://github.com/nedbat/coveragepy |
 | pre-commit | 4.3.0  | MIT License (MIT) | https://github.com/pre-commit/pre-commit  |
+| numpy | 2.3.4 | BSD License (BSD) | https://numpy.org/ |
 
 ## Example
 
@@ -144,12 +145,12 @@ print(metop_reader.shape(longitude_slice))
 
 </details>
 
-6. Covert julia array to numpy (requires that numpy is also installed)
+6. View the julia array as numpy (requires that numpy is also installed)
 
 ```python
 import numpy as np
-# Covert the julia array as numpy
-longitude_slice_np = np.array(longitude_slice) # "copy = None" can be used to reduce memory
+# View the julia array as a numpy array
+longitude_slice_np = np.array(longitude_slice, copy = None)
 print(longitude_slice_np)
 ```
 <details>
@@ -193,13 +194,13 @@ docker run -v ./:/usr/local/bin/metoppy -it python:3.12 /bin/bash
 
 3. Move to the repository and install the package for testing
 ```
-cd /usr/local/bin/metoppy && pip install -e .
+cd /usr/local/bin/metoppy && pip install -e .[test]
 ```
 
 4. Modify the local code and test in the container.
 
 ```
-python3 metoppy/tests/test_get_test_data_artifact.py
+pytest metoppy/tests
 ```
 
-5. When you are happy, push code to your fork and open a MR (Gitlab) or PR (Github)
+5. When you are happy, push code to your fork and open a PR (Github)
