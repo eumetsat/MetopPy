@@ -22,4 +22,4 @@ jobs:
           pip install -e .[test]
       - name: Test with pytest
         run: |
-          pytest metoppy/tests --cov=metoppy --cov-report=xml
+          pytest metoppy/tests --cov=metoppy --cov-report=xml --cov-report=term
