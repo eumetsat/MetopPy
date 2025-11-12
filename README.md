@@ -5,7 +5,7 @@ It's a Python wrapper around [MetopDatasets.jl](https://github.com/eumetsat/Meto
 [MetopDatasets.jl](https://github.com/eumetsat/MetopDatasets.jl) is a package for reading products from the [METOP satellites](https://www.eumetsat.int/our-satellites/metop-series) using the native binary format specified for each product. The METOP satellites are part of the EUMETSAT-POLAR-SYSTEM (EPS) and have produced near real-time, global weather and climate observation since 2007. Learn more METOP and the data access on [EUMETSATs user-portal](https://user.eumetsat.int/dashboard).
 
 ## Status
-MetopPy is under development and is not ready for use yet.
+MetopPy is still in an early development phase. Some features from MetopDatasets.jl are not yet implemented, and the public API may undergo breaking changes in the near future. That said, the package is already useful in its current immature state, and we appreciate curious users trying it out and providing feedback through GitHub issues.
 
 ## Copyright and License
 This code is licensed under MIT license. See file LICENSE for details on the usage and distribution terms.
@@ -15,11 +15,14 @@ This code is licensed under MIT license. See file LICENSE for details on the usa
 * Francesco Murdaca- *Contributor* - [EUMETSAT](http://www.eumetsat.int)
 
 ## Installation
-(This still have to be implemented)
 ```bash
 pip install metoppy
 ```
 
+## Documentaion
+MetopPy does not yet have its own dedicated documentation page. The best resource for now is the Examples section later in this README.
+
+Another useful resource is the [MetopDatasets.jl documentaion page](https://eumetsat.github.io/MetopDatasets.jl/dev/), which provides concrete examples of how to use the Julia version of the package, supported data formats, and additional information.
 
 ## Dependencies
 
