@@ -196,13 +196,13 @@ docker run -v ./:/usr/local/bin/metoppy -it python:3.12 /bin/bash
 ```
 
 3. Move to the repository and install the package for testing
-```
+```bash
 cd /usr/local/bin/metoppy && pip install -e .[test]
 ```
 
 4. Modify the local code and test in the container.
 
-```
+```bash
 pytest metoppy/tests
 ```
 

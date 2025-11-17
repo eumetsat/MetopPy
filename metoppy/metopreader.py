@@ -76,7 +76,7 @@ class MetopReader:
         """
         return Main.size(variable_or_j_array)
 
-    def open_dataset(self, file_path: str, maskingvalue = Main.missing):
+    def open_dataset(self, file_path: str, **kwargs):
         """
         Open a dataset from a record path using MetopDatasets.MetopDataset.
 
@@ -85,9 +85,13 @@ class MetopReader:
         file_path : str
             Path to the dataset record.
 
-        maskingvalue
-            The masking values are used to replace missing observations. Defaults to Julia Missing type. 
-            A recommended alternative is float("nan") which increasse performance for float data.
+                
+        **kwargs
+            Keyword arguments forwarded to MetopDatasets.MetopDataset constructor.
+
+            maskingvalue 
+                The masking values are used to replace missing observations. Defaults to Julia Missing type. 
+                A recommended alternative is float("nan") which increasse performance for float data.
 
         Returns
         -------
@@ -95,7 +99,7 @@ class MetopReader:
             A MetopDataset object opened from the provided path.
         """
         try:
-            return self._open_dataset(file_path, maskingvalue = maskingvalue)
+            return self._open_dataset(file_path, **kwargs)
         except Exception as e:
             raise RuntimeError(f"Failed to open dataset: {file_path}") from e
         

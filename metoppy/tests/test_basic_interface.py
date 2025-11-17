@@ -194,3 +194,26 @@ def test_different_file_types(metop_reader, test_file):
     
     # clean 
     metop_reader.close_dataset(ds)
+
+
+@pytest.mark.parametrize("test_file", ["IASI_xxx"], indirect=True)
+def test_no_auto_convert(metop_reader, test_file):
+    """
+    Test the auto_convert=False. This should retun varibles in the data type
+    used to store them on disk.
+    """
+    # arrange
+    from juliacall import Main as jl
+    ds = metop_reader.open_dataset(file_path=str(test_file), auto_convert=False)
+    
+    # act
+    start_time = ds["record_start_time"][2]
+
+    # assert
+    assert jl.isa(start_time, jl.MetopDatasets.ShortCdsTime)
+    # ShortCdsTime stores the date as days and milliseconds since 00:00 1/1-2000  
+    assert start_time.day == 9034
+    assert start_time.millisecond == 73275381
+
+    # clean 
+    metop_reader.close_dataset(ds)
