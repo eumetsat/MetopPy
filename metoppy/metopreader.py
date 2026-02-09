@@ -12,7 +12,7 @@
 """MetopDatasets.jl Python wrapper class: MetopReader."""
 
 from juliacall import Main
-
+from contextlib import contextmanager
 
 class MetopReader:
     """Python wrapper class for MetopDatasets.jl Julia package."""
@@ -129,3 +129,23 @@ class MetopReader:
             A MetopDataset object containing test data for validation or demo purposes.
         """
         return self._get_test_data_artifact()
+    
+    @contextmanager
+    def dataset(self, file_path: str, **kwargs):
+        """
+        Open a dataset using the python `with` syntax. The method opens the file using `open_dataset()` and
+        then finally closes the file using `close_dataset()` once the excution of the `with` block is completed.
+        
+        Example
+        ----------
+        :: 
+            metop_reader = MetopReader()
+            with metop_reader.dataset("path to a file") as ds:
+                # read some data
+            
+        """
+        ds = self.open_dataset(file_path, **kwargs)
+        try:
+            yield ds
+        finally:
+            self.close_dataset(ds)

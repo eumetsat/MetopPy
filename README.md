@@ -59,8 +59,8 @@ reduced_data_folder = Path(reduced_data_folder)
 reduced_data_files = [f for f in reduced_data_folder.iterdir() if f.is_file()]
 
 test_file_name = next((s for s in reduced_data_files if s.name.startswith("ASCA_SZO")))
-test_file_path = reduced_data_folder / test_file_name
-ds = metop_reader.open_dataset(file_path=str(test_file_path), maskingvalue = float("nan"))
+test_file_path = str(reduced_data_folder / test_file_name)
+ds = metop_reader.open_dataset(file_path=test_file_path, maskingvalue = float("nan"))
 ```
 
 2. Check keys
@@ -175,6 +175,26 @@ print(longitude_slice_np)
 metop_reader.close_dataset(ds)
 ```
 
+8. It is recommended to use the `with` syntax to automaticlly close the file
+
+```python
+latitude = None
+
+with metop_reader.dataset(test_file_path, maskingvalue = float("nan")) as ds:
+  latitude = metop_reader.as_array(ds['latitude'])
+  latitude = np.array(latitude, copy = None)
+
+print(latitude.shape)
+```
+<details>
+
+<summary>Output of the print </summary>
+
+```
+(42, 10)
+```
+
+</details>
 ## Development
 
 Pre-requisite: Install podman or docker in your machine.

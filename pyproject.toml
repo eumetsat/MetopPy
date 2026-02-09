@@ -1,6 +1,6 @@
 [project]
 name = "metoppy"
-version = "0.1.0"
+version = "0.1.1"
 description = "Python package wrapper of MetopDatasets.jl Julia package for reading products from the METOP satellites."
 authors = [
     { name = "Simon Kok Lupemba", email = "simon.koklupemba@eumetsat.int" },

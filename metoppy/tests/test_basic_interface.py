@@ -36,7 +36,7 @@ def test_file(request, metop_reader):
     test_file_name = next((f for f in reduced_data_files if f.name.startswith(product_type)), None)
     test_file_path = reduced_data_folder / test_file_name
 
-    return test_file_path
+    return str(test_file_path)
 
 
 @pytest.mark.parametrize("test_file", ["ASCA_SZO"], indirect=True)
@@ -45,7 +45,7 @@ def test_get_keys(metop_reader, test_file):
     Simple test for metop_reader.get_key
     """
     # arrange
-    ds = metop_reader.open_dataset(file_path=str(test_file))
+    ds = metop_reader.open_dataset(test_file)
     
     # act
     keys = metop_reader.get_keys(ds)
@@ -69,7 +69,7 @@ def test_close_dataset(metop_reader, test_file):
     """
     # arrange
     import juliacall
-    ds = metop_reader.open_dataset(file_path=str(test_file))
+    ds = metop_reader.open_dataset(test_file)
     
     # act
     metop_reader.close_dataset(ds)
@@ -85,7 +85,7 @@ def test_shape(metop_reader, test_file):
     Simple test for metop_reader.shape.
     """
     # arrange
-    ds = metop_reader.open_dataset(file_path=str(test_file))
+    ds = metop_reader.open_dataset(test_file)
     
     # act
     latitude = ds['latitude']
@@ -110,7 +110,7 @@ def test_read_single_value(metop_reader, test_file):
     """
     # arrange
     import datetime
-    ds = metop_reader.open_dataset(file_path=str(test_file))
+    ds = metop_reader.open_dataset(test_file)
     
     # act
     CO2_radiance = ds["gs1cspect"][91, 0, 0, 0]
@@ -137,7 +137,7 @@ def test_read_array(metop_reader, test_file):
     """
     # arrange
     import numpy as np
-    ds = metop_reader.open_dataset(file_path=str(test_file))
+    ds = metop_reader.open_dataset(test_file)
     
     # act
     latitude_julia = metop_reader.as_array(ds['latitude'])
@@ -165,7 +165,7 @@ def test_type_stable_array(metop_reader, test_file):
     """
     # arrange
     import numpy as np
-    ds = metop_reader.open_dataset(file_path=str(test_file), maskingvalue = float("nan"))
+    ds = metop_reader.open_dataset(test_file, maskingvalue = float("nan"))
     
     # act
     latitude = np.array(metop_reader.as_array(ds['latitude']), copy = None)
@@ -186,7 +186,7 @@ def test_different_file_types(metop_reader, test_file):
     Test that different types of test files can be opened.
     """
     # act
-    ds = metop_reader.open_dataset(file_path=str(test_file))
+    ds = metop_reader.open_dataset(test_file)
     
     # assert
     assert ds is not None
@@ -204,7 +204,7 @@ def test_no_auto_convert(metop_reader, test_file):
     """
     # arrange
     from juliacall import Main as jl
-    ds = metop_reader.open_dataset(file_path=str(test_file), auto_convert=False)
+    ds = metop_reader.open_dataset(test_file, auto_convert=False)
     
     # act
     start_time = ds["record_start_time"][2]
@@ -217,3 +217,28 @@ def test_no_auto_convert(metop_reader, test_file):
 
     # clean 
     metop_reader.close_dataset(ds)
+
+
+@pytest.mark.parametrize("test_file", ["ASCA_SZO"], indirect=True)
+def test_with_dataset(metop_reader, test_file):
+    """
+    Test using `with` syntax to read data from a data set.
+    """
+    # arrange
+    import numpy as np
+    import juliacall
+    ds_place_holder = None
+    latitude = None
+
+    # act
+    with metop_reader.dataset(test_file, maskingvalue = float("nan")) as ds:
+        latitude_julia = metop_reader.as_array(ds['latitude'])
+        latitude = np.array(latitude_julia, copy = None)
+        ds_place_holder = ds
+
+    # assert
+    assert np.all((-90 < latitude)&(latitude < 90)) # check values
+    assert latitude.shape == (42,10) # check size
+    with pytest.raises(juliacall.JuliaError): # check that file is closed.
+        ds_place_holder['longitude'][0,0]
+ 
