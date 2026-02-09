@@ -22,7 +22,7 @@ pip install metoppy
 ## Documentaion
 MetopPy does not yet have its own dedicated documentation page. The best resource for now is the Examples section later in this README.
 
-Another useful resource is the [MetopDatasets.jl documentaion page](https://eumetsat.github.io/MetopDatasets.jl/dev/), which provides concrete examples of how to use the Julia version of the package, supported data formats, and additional information.
+Another useful resource is the [MetopDatasets.jl documentaion page](https://eumetsat.github.io/MetopDatasets.jl/v0.2.2/), which provides concrete examples of how to use the Julia version of the package, supported data formats, and additional information.
 
 ## Dependencies
 
