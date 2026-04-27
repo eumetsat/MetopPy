@@ -11,7 +11,7 @@
 """Metoppy package initialization."""
 
 # Optional: version info
-__version__ = "0.1.1"
+__version__ = "0.2.0"
 
 # Import main classes/functions
 from .metopreader import MetopReader

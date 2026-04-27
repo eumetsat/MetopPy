@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented in this file.
 
+
+# 0.2.0(2026-04-27)
+
+### Features
+
+- Enable with syntax using the new MetopReader.dataset method. ([#17](https://github.com/eumetsat/MetopPy/pull/17)) ([938fe62](https://github.com/eumetsat/MetopPy/commit/acb2a3a795160f02826ce5a1bd1c8abea11a9a40))
+
+
 # 0.1.0 (2025-11-06)
 
 First release of metoppy Python package.
